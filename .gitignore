@@ -1,0 +1,14 @@
+# Build output and IDE folders never belong in the plugin repository.
+build/
+build-*/
+out/
+Binaries/
+Intermediate/
+DerivedDataCache/
+.vs/
+.vscode/
+.idea/
+*.user
+*.sln
+*.VC.db
+*.VC.opendb

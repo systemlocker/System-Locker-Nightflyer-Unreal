@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.2.0",
+	"FriendlyName": "System Locker Nightflyer",
+	"Description": "Offline authorization leases for Unreal software: ES256 installation proofs, Ed25519-signed leases, offline time, and OS-backed protected persistence.",
+	"Category": "Licensing",
+	"CreatedBy": "System Locker",
+	"CreatedByURL": "https://systemlocker.net",
+	"DocsURL": "https://github.com/systemlocker/System-Locker-Nightflyer-Unreal#readme",
+	"SupportURL": "https://systemlocker.net",
+	"CanBeUsedWithWorldPartition": true,
+	"CanContainContent": true,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SystemLockerNightflyer",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [ "Win64", "Mac", "Linux" ]
+		}
+	]
+}
