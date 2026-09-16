@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #pragma once
 
 // Root'ed owner of native Nightflyer sessions so Blueprint-facing background
@@ -62,7 +64,7 @@ public:
     static UNightflyerSessionHolder* Acquire()
     {
         static UNightflyerSessionHolder* Holder = [] {
-            UNightflyerSessionHolder* Created = NewObject<UNightflyerSessionHolder>(GetTransientPackage());
+            UNightflyerSessionHolder* Created = NewObject<UNightflyerSessionHolder>();
             // Never garbage collected; the process owns exactly one.
             Created->AddToRoot();
             return Created;

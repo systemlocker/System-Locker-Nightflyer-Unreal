@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #pragma once
 
 // Blueprint surface over the engine-free Nightflyer core. Sessions run their
@@ -129,7 +131,9 @@ struct SYSTEMLOCKERNIGHTFLYER_API FNightflyerAuthorizationResult
     FString Diagnostic;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNightflyerAuthorizationDelegate, const FNightflyerAuthorizationResult&, Result);
+// A callback parameter is single-cast. Multicast delegates are Blueprint-
+// assignable properties and are not accepted as UFUNCTION parameters by UHT.
+DECLARE_DYNAMIC_DELEGATE_OneParam(FNightflyerAuthorizationDelegate, const FNightflyerAuthorizationResult&, Result);
 
 UCLASS()
 class SYSTEMLOCKERNIGHTFLYER_API UNightflyerBlueprintLibrary final : public UBlueprintFunctionLibrary
@@ -139,18 +143,18 @@ class SYSTEMLOCKERNIGHTFLYER_API UNightflyerBlueprintLibrary final : public UBlu
 public:
     /**
      * Runs the recommended startup and recovery flow asynchronously and
-     * broadcasts the result on the game thread. Pass a license key on first
+     * invokes the callback on the game thread. Pass a license key on first
      * run (or to replace a denied one); pass an empty string to reuse the
      * retained credential. One session exists per system ID.
      */
     UFUNCTION(BlueprintCallable, Category = "Nightflyer", meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = "Settings,Binding"))
     static void EasyAuthorize(UObject* WorldContextObject, const FNightflyerSettings& Settings, const FNightflyerBinding& Binding, int32 RequestedOfflineSeconds, const FString& LicenseKey, bool Persistent, FNightflyerAuthorizationDelegate OnComplete);
 
-    /** Runs one lease scheduler pass (renew when due) and broadcasts the state. */
+    /** Runs one lease scheduler pass (renew when due) and invokes the callback. */
     UFUNCTION(BlueprintCallable, Category = "Nightflyer", meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = "Settings,Binding"))
     static void TickSession(UObject* WorldContextObject, const FNightflyerSettings& Settings, const FNightflyerBinding& Binding, FNightflyerAuthorizationDelegate OnComplete);
 
-    /** Ends the active lease for the system (best effort; exact-retry safe). Broadcasts the final state. */
+    /** Ends the active lease for the system (best effort; exact-retry safe). Invokes the callback with the final state. */
     UFUNCTION(BlueprintCallable, Category = "Nightflyer", meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = "Settings"))
     static void EndSession(UObject* WorldContextObject, const FNightflyerSettings& Settings, FNightflyerAuthorizationDelegate OnComplete);
 

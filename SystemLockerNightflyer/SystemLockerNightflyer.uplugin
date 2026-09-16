@@ -2,6 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.2.0",
+	"EngineVersion": "5.3.0",
 	"FriendlyName": "System Locker Nightflyer",
 	"Description": "Offline authorization leases for Unreal software: ES256 installation proofs, Ed25519-signed leases, offline time, and OS-backed protected persistence.",
 	"Category": "Licensing",

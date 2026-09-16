@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "syslocker/nightflyer.hpp"
 #include <filesystem>
 #include <fstream>

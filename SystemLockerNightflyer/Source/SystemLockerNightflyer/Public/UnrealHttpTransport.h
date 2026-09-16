@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #pragma once
 
 // Unreal Engine HTTP adapter for the engine-independent Nightflyer client.

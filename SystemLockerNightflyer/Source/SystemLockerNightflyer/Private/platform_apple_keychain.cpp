@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 // macOS persistence adapters: keychain-backed state store and keychain-held
 // P-256 installation keys. These compile only on Apple targets.
 

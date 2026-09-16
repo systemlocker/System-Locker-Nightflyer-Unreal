@@ -1,4 +1,6 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
 using UnrealBuildTool;
+using System.IO;
 
 public class SystemLockerNightflyer : ModuleRules
 {
@@ -8,6 +10,12 @@ public class SystemLockerNightflyer : ModuleRules
         // Keep the vendored C translation units isolated from the C++ core;
         // combining them in a unity build changes their compile environment.
         bUseUnity = false;
+
+        // Nightflyer's engine-independent core uses typed exceptions for
+        // validation, transport failures, and state-machine rollback. Unreal
+        // Game targets disable unwind semantics by default, so opt this module
+        // in explicitly instead of compiling catch blocks without /EHsc.
+        bEnableExceptions = true;
 
         CppStandard = CppStandardVersion.Cpp20;
 
@@ -29,7 +37,8 @@ public class SystemLockerNightflyer : ModuleRules
 
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Public"));
         PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private"));
-        // Resolves <nlohmann/json.hpp>, "ed25519/ed25519.h", and "micro-ecc/uECC.h".
-        PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private", "Vendor"));
+        // Third-party sources live directly under Source/ThirdParty for Fab's
+        // plugin layout; this path resolves their project-relative includes.
+        PrivateIncludePaths.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "..", "ThirdParty")));
     }
 }

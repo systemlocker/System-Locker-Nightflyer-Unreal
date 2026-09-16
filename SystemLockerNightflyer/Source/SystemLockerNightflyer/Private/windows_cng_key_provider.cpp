@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "internal.hpp"
 
 #ifdef _WIN32
@@ -178,8 +180,12 @@ namespace syslocker::nightflyer
                 GUID value{};
                 if (CoCreateGuid(&value) != S_OK) throw Error(Failure::local_failure, "Could not allocate a CNG installation key name.");
                 char result[33]{};
-                std::snprintf(result, sizeof(result), "%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x", value.Data1, value.Data2, value.Data3,
-                    value.Data4[0], value.Data4[1], value.Data4[2], value.Data4[3], value.Data4[4], value.Data4[5], value.Data4[6], value.Data4[7]);
+                std::snprintf(result, sizeof(result), "%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
+                    static_cast<unsigned int>(value.Data1), static_cast<unsigned int>(value.Data2), static_cast<unsigned int>(value.Data3),
+                    static_cast<unsigned int>(value.Data4[0]), static_cast<unsigned int>(value.Data4[1]),
+                    static_cast<unsigned int>(value.Data4[2]), static_cast<unsigned int>(value.Data4[3]),
+                    static_cast<unsigned int>(value.Data4[4]), static_cast<unsigned int>(value.Data4[5]),
+                    static_cast<unsigned int>(value.Data4[6]), static_cast<unsigned int>(value.Data4[7]));
                 return result;
             }
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "crypto.hpp"
 
 #include <cstring>

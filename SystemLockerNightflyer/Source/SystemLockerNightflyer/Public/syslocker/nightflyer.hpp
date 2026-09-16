@@ -1,4 +1,13 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #pragma once
+
+// UnrealBuildTool supplies SYSTEMLOCKERNIGHTFLYER_API as DLLEXPORT/DLLIMPORT.
+// Pull in the platform definition when this header is compiled by Unreal;
+// standalone conformance builds intentionally remain engine-independent.
+#if defined(UE_GAME) || defined(UE_EDITOR)
+#include "HAL/Platform.h"
+#endif
 
 #include <chrono>
 #include <cstdint>

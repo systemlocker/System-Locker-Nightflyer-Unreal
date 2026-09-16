@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "internal.hpp"
 
 #include <algorithm>

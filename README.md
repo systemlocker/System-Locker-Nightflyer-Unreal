@@ -149,10 +149,9 @@ sessions are not persisted across application or OS restarts.
   Blueprint library already does this). Certificate validation follows the
   engine's HTTP settings and response bodies above 1 MiB are refused.
 - The engine-free core (`Private/nightflyer.cpp`, `Private/authorization_session.cpp`,
-  and the vendored code under `Private/Vendor/`) is identical to what ships in
-  the standalone Nightflyer C++ client and is validated by the same
-  cross-language conformance vectors, including independent crypto-stack
-  cross-validation. See THIRD_PARTY_NOTICES.md for the vendored components.
+  and the vendored code under `Source/ThirdParty/`) uses the same Nightflyer
+  behavior as the standalone C++ client. See THIRD_PARTY_NOTICES.md for the
+  bundled components and their licenses.
 
 ## Security addendum
 

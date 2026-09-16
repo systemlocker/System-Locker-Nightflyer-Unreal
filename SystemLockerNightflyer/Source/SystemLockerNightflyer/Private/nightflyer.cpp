@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "internal.hpp"
 
 #include "ed25519/ed25519.h"
@@ -71,7 +73,14 @@ namespace syslocker::nightflyer
                 struct BootEnvironment { GUID identifier; ULONG firmwareType; ULONGLONG flags; };
                 using Query = LONG (WINAPI*)(ULONG, void*, ULONG, ULONG*);
                 const auto module = GetModuleHandleW(L"ntdll.dll");
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4191) // GetProcAddress intentionally resolves this optional NT function.
+#endif
                 const auto query = module ? reinterpret_cast<Query>(GetProcAddress(module, "NtQuerySystemInformation")) : nullptr;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
                 BootEnvironment boot{}; ULONG length = 0;
                 if (query && query(90, &boot, sizeof(boot), &length) >= 0 && length >= sizeof(GUID))
                 {

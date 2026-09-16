@@ -20,8 +20,8 @@ from the operating system CSPRNG.
 
 Transport security is HTTPS with engine certificate validation, bounded
 response bodies, and idempotent in-flight retries that resend the exact same
-bytes. Signature verification uses the vendored, conformance-validated
-Ed25519 and P-256 implementations compiled into the module — never the
+bytes. Signature verification uses the vendored Ed25519 and P-256
+implementations compiled into the module — never the
 engine, and never a system crypto library the module does not control.
 
 ## Accepted limitations

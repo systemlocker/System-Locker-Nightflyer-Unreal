@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "UnrealHttpTransport.h"
 
 #include "HttpModule.h"
@@ -22,8 +24,11 @@ namespace syslocker::nightflyer
         // instead of a pooled or freed event.
         struct ExchangeSlot final
         {
-            ExchangeSlot() { Done = FPlatformProcess::CreateSynchEvent(false); }
-            ~ExchangeSlot() { delete Done; }
+            ExchangeSlot() { Done = FPlatformProcess::GetSynchEventFromPool(false); }
+            ~ExchangeSlot()
+            {
+                if (Done) FPlatformProcess::ReturnSynchEventToPool(Done);
+            }
             ExchangeSlot(const ExchangeSlot&) = delete;
             ExchangeSlot& operator=(const ExchangeSlot&) = delete;
 
@@ -78,7 +83,7 @@ namespace syslocker::nightflyer
                 // blocked worker thread.
                 AsyncTask(ENamedThreads::GameThread, [slot, targetUrl, requestBody, proofHeader, timeoutSeconds, userAgent]()
                 {
-                    const auto& module = FHttpModule::Get();
+                    auto& module = FHttpModule::Get();
                     const auto request = module.CreateRequest();
                     request->SetURL(targetUrl);
                     request->SetVerb(TEXT("POST"));

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #include "NightflyerBlueprintLibrary.h"
 #include "NightflyerSessionHolder.h"
 #include "UnrealHttpTransport.h"
@@ -5,6 +7,7 @@
 #include "syslocker/nightflyer.hpp"
 
 #include "Async/Async.h"
+#include "HAL/PlatformFile.h"
 #include "HAL/PlatformFileManager.h"
 #include "Misc/Paths.h"
 
@@ -131,14 +134,14 @@ namespace
     {
         // Validate before deriving a state path or key name from project input.
         if (!validSystemId(config.systemId))
-            throw Error(Failure::configuration, "System ID must contain exactly 20 ASCII alphanumeric characters.");
+            throw syslocker::nightflyer::Error(Failure::configuration, "System ID must contain exactly 20 ASCII alphanumeric characters.");
 
         if (!persistent) return AuthorizationSession::memory(config, transport);
 
 #if PLATFORM_WINDOWS
         const auto directory = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("SystemLockerNightflyer"));
-        if (!IPlatformFile::GetPlatformPhysical().CreateDirectoryTree(*directory))
-            throw Error(Failure::local_failure, "The Nightflyer state directory could not be created.");
+        if (!FPlatformFileManager::Get().GetPlatformFile().CreateDirectoryTree(*directory))
+            throw syslocker::nightflyer::Error(Failure::local_failure, "The Nightflyer state directory could not be created.");
         const auto fileName = FString(UTF8_TO_TCHAR(config.systemId.c_str())) + TEXT(".bin");
         const auto path = FPaths::Combine(directory, fileName);
         return AuthorizationSession::persistent(
@@ -152,7 +155,7 @@ namespace
             makeMacosKeychainInstallationKeyProvider(),
             transport);
 #else
-        throw Error(
+        throw syslocker::nightflyer::Error(
             Failure::configuration,
             "Blueprint persistent sessions require Windows or macOS; use the C++ API to provide protected Linux storage.");
 #endif
@@ -218,7 +221,7 @@ void UNightflyerBlueprintLibrary::EasyAuthorize(UObject* WorldContextObject, con
             result.Diagnostic = UTF8_TO_TCHAR(error.what());
         }
 
-        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.Broadcast(result); });
+        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.ExecuteIfBound(result); });
     });
 }
 
@@ -256,7 +259,7 @@ void UNightflyerBlueprintLibrary::TickSession(UObject* WorldContextObject, const
             result.State = ENightflyerAuthorizationState::ProtocolFailure;
             result.Diagnostic = UTF8_TO_TCHAR(error.what());
         }
-        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.Broadcast(result); });
+        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.ExecuteIfBound(result); });
     });
 }
 
@@ -289,7 +292,7 @@ void UNightflyerBlueprintLibrary::EndSession(UObject* WorldContextObject, const 
             result.State = ENightflyerAuthorizationState::ProtocolFailure;
             result.Diagnostic = UTF8_TO_TCHAR(error.what());
         }
-        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.Broadcast(result); });
+        AsyncTask(ENamedThreads::GameThread, [OnComplete, result]() { OnComplete.ExecuteIfBound(result); });
     });
 }
 

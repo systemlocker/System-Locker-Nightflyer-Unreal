@@ -1,9 +1,11 @@
+// Copyright (c) 2026 System Locker. All rights reserved.
+
 #pragma once
 
 // In-house cryptographic primitives for the engine-free Nightflyer core.
 // The module intentionally does not link OpenSSL or any other crypto library:
 // these few, small, auditable implementations plus the vendored Ed25519 and
-// P-256 code under Vendor/ are the whole crypto surface.
+// P-256 code under Source/ThirdParty/ is the whole crypto surface.
 
 #include <array>
 #include <cstddef>
